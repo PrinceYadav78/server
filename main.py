@@ -4,14 +4,17 @@ import os
 app = Flask(__name__)
 
 @app.route('/upload', methods=['POST'])
-def upload_file():
-    file = request.files.get('file')
-    if file:
-        os.makedirs("loot", exist_ok=True)
-        file.save(os.path.join("loot", file.filename))
-        return "Received", 200
-    return "Failed", 400
+def upload():
+    if 'file' not in request.files:
+        return 'No file', 400
+    f = request.files['file']
+    os.makedirs('loot', exist_ok=True)
+    f.save(os.path.join('loot', f.filename))
+    return 'Uploaded', 200
 
 @app.route('/')
-def home():
-    return "OK", 200
+def index():
+    return "Listening...", 200
+
+if __name__ == '__main__':
+    app.run()
